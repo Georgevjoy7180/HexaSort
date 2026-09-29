@@ -1,0 +1,96 @@
+{
+  "ver": "2.3.14",
+  "importer": "fbx",
+  "imported": true,
+  "uuid": "7f8577be-4013-4f6c-954b-9561fc69c7ac",
+  "files": [],
+  "subMetas": {
+    "18468": {
+      "importer": "gltf-scene",
+      "uuid": "7f8577be-4013-4f6c-954b-9561fc69c7ac@18468",
+      "displayName": "",
+      "id": "18468",
+      "name": "Shelf_Base.prefab",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "ef451": {
+      "importer": "gltf-mesh",
+      "uuid": "7f8577be-4013-4f6c-954b-9561fc69c7ac@ef451",
+      "displayName": "",
+      "id": "ef451",
+      "name": "round_base.mesh",
+      "userData": {
+        "gltfIndex": 0,
+        "triangleCount": 80
+      },
+      "ver": "1.1.1",
+      "imported": true,
+      "files": [
+        ".bin",
+        ".json"
+      ],
+      "subMetas": {}
+    },
+    "0b7b5": {
+      "importer": "gltf-material",
+      "uuid": "7f8577be-4013-4f6c-954b-9561fc69c7ac@0b7b5",
+      "displayName": "",
+      "id": "0b7b5",
+      "name": "phong1.material",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.14",
+      "imported": true,
+      "files": [
+        ".json"
+      ],
+      "subMetas": {}
+    }
+  },
+  "userData": {
+    "imageMetas": [],
+    "fbx": {
+      "smartMaterialEnabled": true
+    },
+    "lods": {
+      "enable": false,
+      "hasBuiltinLOD": false,
+      "options": [
+        {
+          "screenRatio": 0.25,
+          "faceCount": 1
+        },
+        {
+          "screenRatio": 0.125,
+          "faceCount": 0.25
+        },
+        {
+          "screenRatio": 0.01,
+          "faceCount": 0.1
+        }
+      ]
+    },
+    "assetFinder": {
+      "meshes": [
+        "7f8577be-4013-4f6c-954b-9561fc69c7ac@ef451"
+      ],
+      "skeletons": [],
+      "textures": [],
+      "materials": [
+        "7f8577be-4013-4f6c-954b-9561fc69c7ac@0b7b5"
+      ],
+      "scenes": [
+        "7f8577be-4013-4f6c-954b-9561fc69c7ac@18468"
+      ]
+    }
+  }
+}
