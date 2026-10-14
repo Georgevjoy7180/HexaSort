@@ -56,17 +56,17 @@ const DROP_COLUMN_INDEX = 0;
 const COLUMN_COUNT = 14;
 
 // Two guaranteed target-colored hexes per level — one for each of the two
-// required clears — both within 1-2 steps of column 0 (the ring is now a
-// regular 14-gon, so "column k" is exactly k steps from the reference) so
-// every round stays quick even though the rest of the tower is random.
+// required clears — kept strictly within 1-3 steps of column 0 (1 or 13 = 1 step,
+// 2 or 12 = 2 steps, 3 or 11 = 3 steps) so every round can be solved with a quick,
+// natural swipe without player frustration.
 // Level0's first column is the tutorial's demonstrated move.
 const GUARANTEED_COLUMNS_BY_LEVEL: number[][] = [
-    [1, 13],
-    [2, 12],
-    [1, 13],
-    [2, 12],
-    [1, 13],
-    [2, 12]
+    [1, 13], // 1 step away (+1 or -1)
+    [2, 12], // 2 steps away (+2 or -2)
+    [3, 11], // 3 steps away (+3 or -3)
+    [1, 13], // 1 step away
+    [2, 12], // 2 steps away
+    [3, 11]  // 3 steps away
 ];
 
 const TUTORIAL_LEVEL_INDEX = 0;
@@ -185,8 +185,16 @@ export class GameManager extends Component implements TowerInputHost {
         if (!piece || !this.dropColumn)
             return;
 
-        if (!this.dropColumn.canAccept(piece.getColor()))
+        if (!this.dropColumn.canAccept(piece.getColor())) {
+            // Color does not match the drop column: lock interaction while reverting back to Slots_00
+            this.state = GameState.Resolving;
+            level.revertToColumn(DROP_COLUMN_INDEX, 0.25, () => {
+                if (this.state !== GameState.Complete) {
+                    this.state = GameState.Playing;
+                }
+            });
             return;
+        }
 
         slot.removeHex();
 
@@ -218,6 +226,9 @@ export class GameManager extends Component implements TowerInputHost {
 
         this.state = GameState.Complete;
         this.towerInput?.hideTutorial();
+        if (this.towerInput) {
+            this.towerInput.enabled = false;
+        }
         this.ctaController?.show();
 
     }
@@ -430,12 +441,16 @@ export class GameManager extends Component implements TowerInputHost {
 
         const anchors: Node[] = [];
         const levelYs = this.levels.map(level => level.worldY).sort((a, b) => a - b);
+        const baseY = levelYs.length > 0 ? levelYs[0] : 0;
+        // The hex mesh has height ~0.02, scaled by 5 (0.05 parent * 100 child) = ~0.10.
+        // Anchors are spaced exactly by hex thickness so falling hexes stack seamlessly without gaps.
+        const hexHeight = 0.10;
 
-        for (const y of levelYs) {
+        for (let i = 0; i < this.levels.length; i++) {
 
             const anchor = new Node('DropAnchor');
             columnNode.addChild(anchor);
-            anchor.setPosition(0, y, 0);
+            anchor.setPosition(0, baseY + i * hexHeight, 0);
 
             anchors.push(anchor);
 

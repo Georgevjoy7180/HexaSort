@@ -181,7 +181,38 @@ export class CTAController extends Component {
     // the single seam so no ad-network code has to spread through gameplay.
     public openStore(): void {
 
-        console.log('[CTAController] openStore() called — wire up the ad network click-through here.');
+        const storeUrl = 'https://play.google.com/store/apps/details?id=com.gamebrain.hexasort';
+
+        console.log('[CTAController] Redirecting to store:', storeUrl);
+
+        const win = window as any;
+
+        // MRAID (AppLovin, Unity Ads, IronSource, Vungle, etc.)
+        if (typeof win.mraid !== 'undefined') {
+            if (typeof win.mraid.open === 'function') {
+                win.mraid.open(storeUrl);
+                return;
+            }
+        }
+
+        // Facebook / Meta Playable Ads
+        if (typeof win.FbPlayableAd !== 'undefined' && typeof win.FbPlayableAd.onCTAClick === 'function') {
+            win.FbPlayableAd.onCTAClick();
+            return;
+        }
+
+        // Mintegral / DAPI
+        if (typeof win.dapi !== 'undefined' && typeof win.dapi.openStoreUrl === 'function') {
+            win.dapi.openStoreUrl(storeUrl);
+            return;
+        }
+
+        // Google / generic web fallback
+        if (typeof window !== 'undefined' && window.open) {
+            window.open(storeUrl, '_blank');
+        } else if (typeof window !== 'undefined' && window.location) {
+            window.location.href = storeUrl;
+        }
 
     }
 

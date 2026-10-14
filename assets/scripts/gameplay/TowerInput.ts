@@ -79,10 +79,11 @@ export class TowerInput extends Component {
         this.towerCenterZ = towerCenterZ;
         this.host = host;
 
-        // A half-screen-width drag rotates the tower by ~150 degrees — fast
-        // enough to feel responsive without overshooting on a full swipe.
+        // A half-screen-width drag rotates the tower by ~225 degrees — ensuring
+        // the player can comfortably reach any position on the 360-degree cylinder
+        // (max 180 degrees in either direction) in a single natural swipe.
         const visibleWidth = view.getVisibleSize().width;
-        this.degreesPerPixel = 150 / (visibleWidth * 0.5);
+        this.degreesPerPixel = 225 / (visibleWidth * 0.5);
 
         input.on(Input.EventType.TOUCH_START, this.onDown, this);
         input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
@@ -115,6 +116,9 @@ export class TowerInput extends Component {
     // --------------------------------------------------
 
     private onDown(event: EventTouch | EventMouse) {
+
+        if (!this.enabled)
+            return;
 
         this.hideTutorial();
 

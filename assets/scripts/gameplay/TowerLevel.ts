@@ -166,6 +166,31 @@ export class TowerLevel {
     }
 
 
+    // Animates the level back to aligning a specific column (e.g. column 0)
+    // with an optional delay and callback upon completion.
+    public revertToColumn(column: number, delaySeconds = 0, onComplete?: () => void): void {
+
+        const k = this.order.indexOf(column);
+
+        if (k < 0) {
+            onComplete?.();
+            return;
+        }
+
+        this.alignedIndex = k;
+        const targetTheta = this.thetaFor(k);
+
+        tween(this.node)
+            .delay(delaySeconds)
+            .to(SNAP_DURATION, { eulerAngles: new Vec3(0, targetTheta, 0) }, { easing: 'backOut' })
+            .call(() => {
+                onComplete?.();
+            })
+            .start();
+
+    }
+
+
     // Cocos's Y-axis rotation moves a point from local angle φ to world
     // angle (φ - θ) (positive θ follows the right-hand rule around +Y —
     // verified directly against Quat.fromEuler/Vec3.transformQuat, not
